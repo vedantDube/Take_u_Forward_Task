@@ -1255,7 +1255,7 @@ export function Calendar() {
                           whileTap={{ scale: 0.95 }}
                         >
                           Clear
-                        </button>
+                        </motion.button>
                       </div>
                     </div>
                   )}
