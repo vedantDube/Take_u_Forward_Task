@@ -890,7 +890,7 @@ export function Calendar() {
         }`}>
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <button
+              <motion.button
                 onClick={handlePreviousMonth}
                 className={`rounded-full border p-2 shadow-sm transition-colors duration-200 ${
                   isDarkMode
@@ -898,13 +898,21 @@ export function Calendar() {
                     : "border-gray-200 bg-white text-gray-700 hover:bg-gray-100"
                 }`}
                 aria-label="Previous month"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <ChevronLeft className="h-5 w-5" />
-              </button>
-              <p className={`min-w-44 text-sm font-semibold ${isDarkMode ? "text-slate-100" : "text-gray-800"}`}>
+              </motion.button>
+              <motion.p 
+                className={`min-w-44 text-sm font-semibold ${isDarkMode ? "text-slate-100" : "text-gray-800"}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                key={currentMonthLabel}
+              >
                 {currentMonthLabel}
-              </p>
-              <button
+              </motion.p>
+              <motion.button
                 onClick={handleNextMonth}
                 className={`rounded-full border p-2 shadow-sm transition-colors duration-200 ${
                   isDarkMode
@@ -912,47 +920,56 @@ export function Calendar() {
                     : "border-gray-200 bg-white text-gray-700 hover:bg-gray-100"
                 }`}
                 aria-label="Next month"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <ChevronRight className="h-5 w-5" />
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 onClick={handleJumpToToday}
                 className={`inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-xs font-semibold shadow-sm ${
                   isDarkMode
                     ? "border-sky-500/50 bg-sky-500/20 text-sky-100 hover:bg-sky-500/30"
                     : "border-sky-300 bg-sky-50 text-sky-700 hover:bg-sky-100"
                 }`}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <CalendarDays className="h-3.5 w-3.5" /> Today
-              </button>
+              </motion.button>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <button
+              <motion.button
                 onClick={triggerExport}
                 className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1.5 text-xs font-semibold shadow-sm ${
                   isDarkMode
                     ? "border-slate-600 text-slate-200 hover:bg-slate-800"
                     : "border-gray-300 text-gray-700 hover:bg-white"
                 }`}
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Download className="h-3.5 w-3.5" /> Export
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 onClick={() => importInputRef.current?.click()}
                 className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1.5 text-xs font-semibold shadow-sm ${
                   isDarkMode
                     ? "border-slate-600 text-slate-200 hover:bg-slate-800"
                     : "border-gray-300 text-gray-700 hover:bg-white"
                 }`}
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Upload className="h-3.5 w-3.5" /> Import
-              </button>
+              </motion.button>
               <div className={`inline-flex rounded-md border p-1 ${
                 isDarkMode ? "border-slate-600 bg-slate-800" : "border-gray-300 bg-gray-50"
               }`}>
                 {(["light", "dark", "auto"] as AppearanceMode[]).map((mode) => (
-                  <button
+                  <motion.button
                     key={mode}
                     onClick={() => updateAppearanceMode(mode)}
                     className={`rounded px-2 py-1 text-xs font-semibold capitalize transition-colors ${
@@ -964,9 +981,12 @@ export function Calendar() {
                           ? "text-slate-300 hover:bg-slate-700/70"
                           : "text-gray-600 hover:bg-white"
                     }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    layout
                   >
                     {mode}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             </div>
@@ -994,17 +1014,22 @@ export function Calendar() {
                 </p>
 
                 {/* Image Indicator Dots */}
-                <div className="flex justify-center gap-2">
+                <motion.div 
+                  className="flex justify-center gap-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
                   {HERO_IMAGES.map((_, idx) => (
-                    <button
+                    <motion.button
                       key={idx}
                       onClick={() => setHeroImageIndex(idx)}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      className={`h-2 rounded-full transition-all duration-300 ${
                         idx === calendarState.heroImageIndex
                           ? "w-6"
                           : isDarkMode
-                            ? "bg-slate-600 hover:bg-slate-500"
-                            : "bg-gray-300 hover:bg-gray-400"
+                            ? "w-2 bg-slate-600 hover:bg-slate-500"
+                            : "w-2 bg-gray-300 hover:bg-gray-400"
                       }`}
                       style={
                         idx === calendarState.heroImageIndex
@@ -1012,27 +1037,37 @@ export function Calendar() {
                           : undefined
                       }
                       aria-label={`Image ${idx + 1}`}
+                      whileHover={{ scale: 1.3 }}
+                      whileTap={{ scale: 0.9 }}
+                      layout
                     />
                   ))}
-                </div>
+                </motion.div>
               </div>
 
               {/* Theme Selector */}
-              <div className={`p-4 border-t ${isDarkMode ? "border-slate-700" : "border-gray-200"}`}>
+              <motion.div 
+                className={`p-4 border-t ${isDarkMode ? "border-slate-700" : "border-gray-200"}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+              >
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <p className={`text-xs font-semibold uppercase ${isDarkMode ? "text-slate-300" : "text-gray-600"}`}>
                     Theme Color
                   </p>
-                  <button
+                  <motion.button
                     onClick={() => setAutoTheme(!autoThemeEnabled)}
                     className={`rounded-md border px-2 py-1 text-xs font-semibold ${
                       isDarkMode
                         ? "border-slate-600 text-slate-200 hover:bg-slate-800"
                         : "border-gray-300 text-gray-700 hover:bg-gray-50"
                     }`}
+                    whileHover={{ scale: 1.05, y: -1 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {autoThemeEnabled ? "Auto from image: ON" : "Auto from image: OFF"}
-                  </button>
+                  </motion.button>
                 </div>
 
                 <div className="mb-3 flex items-center gap-2">
@@ -1043,7 +1078,7 @@ export function Calendar() {
                     isDarkMode ? "border-slate-600 bg-slate-800" : "border-gray-300 bg-gray-50"
                   }`}>
                     {(["light", "dark", "auto"] as AppearanceMode[]).map((mode) => (
-                      <button
+                      <motion.button
                         key={mode}
                         onClick={() => updateAppearanceMode(mode)}
                         className={`rounded px-2 py-1 text-xs font-semibold capitalize transition-colors ${
@@ -1055,21 +1090,29 @@ export function Calendar() {
                               ? "text-slate-300 hover:bg-slate-700/70"
                               : "text-gray-600 hover:bg-white"
                         }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        layout
                       >
                         {mode}
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <motion.div 
+                  className="flex flex-wrap gap-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, staggerChildren: 0.05 }}
+                >
                   {(
                     ["blue", "warm", "cool", "neutral", "vibrant"] as ThemeColor[]
-                  ).map((color) => (
-                    <button
+                  ).map((color, idx) => (
+                    <motion.button
                       key={color}
                       onClick={() => setThemeColor(color)}
-                      className={`w-8 h-8 rounded-full transition-all duration-200 border-2 ${
+                      className={`w-8 h-8 rounded-full transition-all duration-200 border-2 shadow-md ${
                         calendarState.themeColor === color
                           ? isDarkMode
                             ? "border-slate-100 scale-110"
@@ -1080,10 +1123,18 @@ export function Calendar() {
                         backgroundImage: THEME_COLORS[color].gradient,
                       }}
                       title={`${color} gradient theme`}
+                      initial={{ opacity: 0, scale: 0.6 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: idx * 0.05 }}
+                      whileHover={{ 
+                        scale: calendarState.themeColor === color ? 1.2 : 1.15,
+                        boxShadow: "0 0 12px rgba(0,0,0,0.3)"
+                      }}
+                      whileTap={{ scale: 0.9 }}
                     />
                   ))}
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
 
@@ -1144,12 +1195,17 @@ export function Calendar() {
                           )}
 
                           {!selectionDetails.isRange && (
-                            <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <motion.div 
+                              className="mt-2 flex flex-wrap items-center gap-2"
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.1 }}
+                            >
                               <span className={`text-xs font-semibold ${isDarkMode ? "text-slate-300" : "text-gray-600"}`}>
                                 Day Mood
                               </span>
-                              {(Object.keys(MOOD_META) as MoodType[]).map((mood) => (
-                                <button
+                              {(Object.keys(MOOD_META) as MoodType[]).map((mood, idx) => (
+                                <motion.button
                                   key={mood}
                                   onClick={() => handleMoodSelect(mood)}
                                   className={`rounded-full px-2 py-0.5 text-xs font-semibold transition ${
@@ -1162,29 +1218,41 @@ export function Calendar() {
                                     color: MOOD_META[mood].color,
                                     borderColor: `${MOOD_META[mood].color}55`,
                                   }}
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: idx * 0.08 }}
+                                  whileHover={{ scale: 1.08, y: -2 }}
+                                  whileTap={{ scale: 0.95 }}
                                 >
                                   {MOOD_META[mood].label}
-                                </button>
+                                </motion.button>
                               ))}
-                              <button
+                              <motion.button
                                 onClick={() => handleMoodSelect(null)}
                                 className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
                                   isDarkMode ? "text-slate-300" : "text-gray-600"
                                 }`}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.38 }}
+                                whileHover={{ scale: 1.08 }}
+                                whileTap={{ scale: 0.95 }}
                               >
                                 Clear mood
-                              </button>
-                            </div>
+                              </motion.button>
+                            </motion.div>
                           )}
                         </div>
 
-                        <button
+                        <motion.button
                           onClick={clearDateRange}
                           className={`px-3 py-1 rounded transition-colors duration-200 font-semibold ${
                             isDarkMode
                               ? "text-red-300 hover:bg-red-500/10"
                               : "text-red-600 hover:bg-red-50"
                           }`}
+                          whileHover={{ scale: 1.05, y: -1 }}
+                          whileTap={{ scale: 0.95 }}
                         >
                           Clear
                         </button>
@@ -1203,13 +1271,21 @@ export function Calendar() {
               </p>
 
               {savedSelectionNotes.length === 0 ? (
-                <p className={`text-sm ${isDarkMode ? "text-slate-400" : "text-gray-500"}`}>
+                <motion.p 
+                  className={`text-sm ${isDarkMode ? "text-slate-400" : "text-gray-500"}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
                   No saved date/range notes for this month yet.
-                </p>
+                </motion.p>
               ) : (
-                <div className="space-y-2">
-                  {savedSelectionNotes.map((item) => (
-                    <button
+                <motion.div 
+                  className="space-y-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  {savedSelectionNotes.map((item, idx) => (
+                    <motion.button
                       key={item.key}
                       onClick={() => openSavedSelection(item)}
                       className={`w-full rounded-md border px-3 py-2 text-left ${
@@ -1217,12 +1293,16 @@ export function Calendar() {
                           ? "border-slate-700 hover:bg-slate-800"
                           : "border-gray-200 hover:bg-gray-50"
                       }`}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      whileHover={{ x: 4, scale: 1.01 }}
                     >
                       <p className={`text-sm font-semibold ${isDarkMode ? "text-slate-100" : "text-gray-800"}`}>{item.label}</p>
                       <p className={`line-clamp-1 text-xs ${isDarkMode ? "text-slate-400" : "text-gray-500"}`}>{item.note}</p>
-                    </button>
+                    </motion.button>
                   ))}
-                </div>
+                </motion.div>
               )}
             </div>
 
@@ -1242,7 +1322,7 @@ export function Calendar() {
                   Advanced Planner Lab
                 </p>
                 <div className="flex items-center gap-2">
-                  <button
+                  <motion.button
                     onClick={() => setIsReplayRunning((prev) => !prev)}
                     className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-semibold shadow-sm ${
                       isReplayRunning
@@ -1251,30 +1331,45 @@ export function Calendar() {
                           ? "border-slate-600 text-slate-200 hover:bg-slate-800"
                           : "border-gray-300 text-gray-700 hover:bg-white"
                     }`}
+                    whileHover={{ scale: 1.05, y: -1 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {isReplayRunning ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                    {isReplayRunning ? (
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 0.8, repeat: Infinity }}
+                      >
+                        <Pause className="h-3.5 w-3.5" />
+                      </motion.div>
+                    ) : (
+                      <Play className="h-3.5 w-3.5" />
+                    )}
                     {isReplayRunning ? "Pause Replay" : "Month Replay"}
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
                     onClick={triggerExport}
                     className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-semibold shadow-sm ${
                       isDarkMode
                         ? "border-slate-600 text-slate-200 hover:bg-slate-800"
                         : "border-gray-300 text-gray-700 hover:bg-white"
                     }`}
+                    whileHover={{ scale: 1.05, y: -1 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     <Download className="h-3.5 w-3.5" /> Export
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
                     onClick={() => importInputRef.current?.click()}
                     className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-semibold shadow-sm ${
                       isDarkMode
                         ? "border-slate-600 text-slate-200 hover:bg-slate-800"
                         : "border-gray-300 text-gray-700 hover:bg-white"
                     }`}
+                    whileHover={{ scale: 1.05, y: -1 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     <Upload className="h-3.5 w-3.5" /> Import
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
